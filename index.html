@@ -483,8 +483,8 @@
             <h2>✨このツールでできること</h2>
             <p>ココフォリアでキャラクターの立ち絵を切り替えたとき、<strong>コマが急に大きくなったり小さくなったりする問題</strong>を解決します</p>
             
-            <h3>◆なぜサイズが変わってしまうの？</h3>
-            <p>ココフォリアでは、画像の<strong>横幅</strong>コマのサイズが決まります</p>
+            <h3>◆なぜサイズが変わってしまうのか</h3>
+            <p>ココフォリアでは、画像の<strong>横幅</strong>でコマのサイズが決まります</p>
             <div class="example">
                 例えば：<br>
                 • 通常立ち絵：横幅500px → コマサイズ普通<br>
@@ -550,7 +550,7 @@
         <div class="footer">
             <div class="footer-content">
                 <span>作成者: <a href="https://x.com/WW_3338" target="_blank" rel="noopener noreferrer">Wool&Wag</a></span>
-                <!-- <img src="your-icon.png" alt="作成者アイコン：今度追加" class="footer-icon"> -->
+                <!-- <img src="your-icon.png" alt="作成者アイコン" class="footer-icon"> -->
             </div>
         </div>
     </div>
@@ -575,11 +575,11 @@
         const description = document.getElementById('description');
         const changelogLink = document.getElementById('changelogLink');
         
-        // 更新履歴リンクのクリックイベント（将来的に使用）
+        // 更新履歴リンクのクリックイベント（未使用）
         changelogLink.addEventListener('click', (e) => {
             e.preventDefault();
             alert('更新履歴はまだありません');
-            // 将来的にはモーダルやページ遷移などで更新履歴を表示
+            // 将来的にモーダルやページ遷移などで更新履歴を表示するかも
         });
         
         // 説明の開閉
@@ -706,7 +706,7 @@
             
             try {
                 const imageDataList = [];
-                const total = originalFiles.length; // 追加
+                const total = originalFiles.length;
                 
                 for (let i = 0; i < total; i++) {
                     const file = originalFiles[i];
@@ -873,7 +873,6 @@
                 let fileName = data.fileName;
                 let mimeType, downloadQuality;
                 
-                // ファイル名の拡張子処理を修正
                 const nameBody = getFileNameBody(fileName);
 
                 if (convertToWebP) {
@@ -906,7 +905,7 @@
                 // メモリ解放
                 setTimeout(() => URL.revokeObjectURL(url), 1000);
                 
-                // ブラウザのダウンロードブロック回避のため待機時間を延長 (100ms -> 500ms以上推奨)
+                // ブラウザのダウンロードブロック回避のため待機時間を長めに (100ms -> 500ms以上推奨)
                 await new Promise(resolve => setTimeout(resolve, 500));
                 
                 // 進捗表示
