@@ -317,6 +317,10 @@
             background: white;
             position: relative;
             transition: all 0.3s;
+            min-height: 180px; /* 読み込み中に高さが潰れないように確保 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Loading文字を中央に */
         }
         
         .preview-item img {
@@ -325,6 +329,7 @@
             object-fit: contain;
             background: repeating-conic-gradient(#f0f0f0 0% 25%, white 0% 50%) 50% / 20px 20px;
             border-radius: 8px;
+            flex-grow: 1; /* 画像が表示されたらスペースを埋める */
         }
         
         .preview-name {
@@ -649,22 +654,35 @@
                 return;
             }
             
+            // ファイルリストに追加
             originalFiles = [...originalFiles, ...newFiles];
             previewArea.classList.add('active');
             
-            newFiles.forEach((file, index) => {
+            newFiles.forEach((file) => {
+                const fileIndex = originalFiles.indexOf(file);
+                
+                // 枠を作成
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                previewItem.dataset.index = fileIndex;
+                
+                // 読み込み中はローディング表示や空の状態にしておく
+                previewItem.innerHTML = `
+                    <div class="loading">Loading...</div>
+                `;
+                
+                // 親要素に追加（この時点で順番が確定する）
+                previewArea.appendChild(previewItem);
+                
+                // 画像読み込み開始
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    const fileIndex = originalFiles.indexOf(file);
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'preview-item';
-                    previewItem.dataset.index = fileIndex;
+                    // 読み込み完了後、予約しておいた枠の中身を更新する
                     previewItem.innerHTML = `
                         <button class="btn-remove" onclick="removeFile(${fileIndex})">×</button>
                         <img src="${e.target.result}" alt="${file.name}">
                         <div class="preview-name" title="${file.name}">${file.name}</div>
                     `;
-                    previewArea.appendChild(previewItem);
                 };
                 reader.readAsDataURL(file);
             });
@@ -711,7 +729,7 @@
         
         processBtn.addEventListener('click', processImages);
         
-        async function processImages() {
+async function processImages() {
             processBtn.disabled = true;
             showStatus('画像を処理中...', 'info');
             
@@ -721,10 +739,7 @@
                 
                 for (let i = 0; i < total; i++) {
                     const file = originalFiles[i];
-                    
-                    // 進捗を表示
                     showStatus(`画像を処理中... (${i + 1}/${total})`, 'info');
-                    // ブラウザの描画更新のために一瞬待機（フリーズ回避）
                     await new Promise(resolve => setTimeout(resolve, 0));
 
                     const img = await loadImage(file);
@@ -746,10 +761,15 @@
                 });
                 
                 previewArea.innerHTML = '';
+                
                 processedImages.forEach((data, i) => {
                     const previewItem = document.createElement('div');
                     previewItem.className = 'preview-item';
+                    
+                    // ★修正点: ここに「×ボタン」のHTMLを追加しました
+                    // 削除時は removeFile(i) を呼び出します（未処理状態に戻ります）
                     previewItem.innerHTML = `
+                        <button class="btn-remove" onclick="removeFile(${i})">×</button>
                         <img src="${data.canvas.toDataURL()}" alt="${data.fileName}">
                         <div class="preview-name" title="${data.fileName}">${data.fileName} (処理済み)</div>
                     `;
@@ -759,7 +779,7 @@
                 downloadBtn.disabled = false;
                 showStatus('処理が完了しました！', 'success');
             } catch (error) {
-                console.error(error); // デバッグ用
+                console.error(error);
                 showStatus('エラーが発生しました: ' + error.message, 'error');
                 processBtn.disabled = false;
             }
