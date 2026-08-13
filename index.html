@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ココフォリア用 立ち絵サイズ調整ツール</title>
-    <!-- 配布ページ（https://woolwag3338.github.io/character-image-size/）向けのメタ情報。
-         og:url と og:image は絶対URLでなければSNS側が解決できないため、公開先を直書きする。
-         リポジトリ名やアカウント名を変えたら、ここと dist/README.md も直すこと。
-         file:// で開いたときは単に無視されるだけで、動作には影響しない -->
     <meta name="description" content="ココフォリアで立ち絵を切り替えるとコマ画像の大きさが変わってしまう問題を解決する非公式ツール。透明部分のトリミング・横幅の統一・WebP変換を、ブラウザ内だけで行います。">
     <meta name="theme-color" content="#f1f5f7">
     <link rel="canonical" href="https://woolwag3338.github.io/character-image-size/">
@@ -48,7 +44,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-image: linear-gradient(0deg, transparent 21px, #a4c1d7 22px),linear-gradient(90deg,  transparent 21px, #a4c1d7 22px);
@@ -57,7 +53,7 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -73,7 +69,7 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        
+
         .disclaimer {
             text-align: center;
             font-size: 13px;
@@ -89,18 +85,18 @@
             margin-bottom: 20px;
             font-size: 14px;
         }
-        
+
         .header-links a {
             color: #66bcea;
             text-decoration: none;
             transition: color 0.3s;
         }
-        
+
         .header-links a:hover {
             color: #4a9fce;
             text-decoration: underline;
         }
-        
+
         .description-toggle {
             background: #66bcea;
             color: white;
@@ -119,20 +115,20 @@
             transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(102, 188, 234, 0.2);
         }
-        
+
         .description-toggle:hover {
             background: #4a9fce;
             box-shadow: 0 4px 12px rgba(102, 188, 234, 0.3);
         }
-        
+
         .description-toggle::after {
             content: '▼';
         }
-        
+
         .description-toggle.active::after {
             transform: rotate(180deg);
         }
-        
+
         .description {
             background: #f8f9ff;
             border-left: 4px solid #66bcea;
@@ -153,35 +149,35 @@
             margin-bottom: 30px;
             transition: max-height 0.5s ease-in-out, padding 0.25s ease-out;
         }
-        
+
         .description h2 {
             color: #4a9fce;
             font-size: 18px;
             margin-bottom: 15px;
         }
-        
+
         .description h3 {
             color: #555;
             font-size: 16px;
             margin-top: 20px;
             margin-bottom: 10px;
         }
-        
+
         .description p {
             color: #555;
             margin-bottom: 12px;
         }
-        
+
         .description ul {
             margin-left: 20px;
             margin-bottom: 12px;
         }
-        
+
         .description li {
             color: #555;
             margin-bottom: 6px;
         }
-        
+
         .description .example {
             background: white;
             padding: 12px;
@@ -190,12 +186,12 @@
             font-size: 14px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
+
         .description strong {
             color: #4a9fce;
             font-weight: 600;
         }
-        
+
         .upload-area {
             border: 3.5px dashed #66bcea;
             border-radius: 12px;
@@ -207,36 +203,36 @@
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(102, 188, 234, 0.1);
         }
-        
+
         .upload-area:hover {
             border-color: #00f2fe;
             background: #e5fdff;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 188, 234, 0.2);
         }
-        
+
         .upload-area.dragover {
             border-color: #4a9fce;
             background: #e8f4fd;
             transform: scale(1.01);
             box-shadow: 0 4px 12px rgba(102, 188, 234, 0.25);
         }
-        
+
         #fileInput {
             display: none;
         }
-        
+
         .upload-text {
             font-size: 18px;
             color: #666;
             margin-bottom: 10px;
         }
-        
+
         .upload-hint {
             font-size: 14px;
             color: #999;
         }
-        
+
         .options {
             background: #f1f3f5;
             padding: 20px;
@@ -325,11 +321,11 @@
             margin-top: 6px;
             line-height: 1.4;
         }
-        
+
         .option-group {
             margin-bottom: 15px;
         }
-        
+
         .option-group label {
             display: flex;
             align-items: center;
@@ -337,7 +333,7 @@
             color: #555;
             cursor: pointer;
         }
-        
+
         .option-group input[type="checkbox"] {
             width: 20px;
             height: 20px;
@@ -345,18 +341,18 @@
             cursor: pointer;
             accent-color: #66bcea;
         }
-        
+
         .quality-option {
             margin-left: 30px;
             margin-top: 10px;
         }
-        
+
         .quality-controls {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .quality-option select {
             padding: 8px 12px;
             border: 1px solid #ddd;
@@ -365,12 +361,12 @@
             cursor: pointer;
             transition: border-color 0.3s;
         }
-        
+
         .quality-option select:focus {
             outline: none;
             border-color: #66bcea;
         }
-        
+
         .quality-slider-container {
             display: none;
             align-items: center;
@@ -378,23 +374,23 @@
             margin-left: 30px;
             margin-top: 10px;
         }
-        
+
         .quality-slider-container.active {
             display: flex;
         }
-        
+
         input[type="range"] {
             width: 200px;
             cursor: pointer;
             accent-color: #66bcea;
         }
-        
+
         .quality-value {
             font-weight: 600;
             color: #66bcea;
             min-width: 40px;
         }
-        
+
         .preview-area {
             display: none;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -406,29 +402,29 @@
             border-radius: 12px;
             background: #fafafa;
         }
-        
+
         .preview-area.active {
             display: grid;
         }
-        
+
         .preview-area::-webkit-scrollbar {
             width: 10px;
         }
-        
+
         .preview-area::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 10px;
         }
-        
+
         .preview-area::-webkit-scrollbar-thumb {
             background: #66bcea;
             border-radius: 10px;
         }
-        
+
         .preview-area::-webkit-scrollbar-thumb:hover {
             background: #4a9fce;
         }
-        
+
         .preview-item {
             border: 1px solid #e0e0e0;
             border-radius: 12px;
@@ -441,7 +437,7 @@
             flex-direction: column;
             justify-content: center; /* Loading文字を中央に */
         }
-        
+
         .preview-item img {
             width: 100%;
             height: 150px;
@@ -450,7 +446,7 @@
             border-radius: 8px;
             flex-grow: 1; /* 画像が表示されたらスペースを埋める */
         }
-        
+
         .preview-name {
             font-size: 12px;
             color: #666;
@@ -484,14 +480,14 @@
             background: #7f8c8d;
             transform: scale(1.15);
         }
-        
+
         .buttons {
             display: flex;
             gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
         }
-        
+
         button {
             padding: 12px 30px;
             font-size: 16px;
@@ -502,47 +498,47 @@
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-process {
             background: #66bcea;
             color: white;
         }
-        
+
         .btn-process:hover:not(:disabled) {
             background: #4a9fce;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 188, 234, 0.4);
         }
-        
+
         .btn-download {
             background: #3498db;
             color: white;
         }
-        
+
         .btn-download:hover:not(:disabled) {
             background: #2980b9;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
         }
-        
+
         .btn-clear {
             background: #95a5a6;
             color: white;
         }
-        
+
         .btn-clear:hover:not(:disabled) {
             background: #7f8c8d;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(149, 165, 166, 0.4);
         }
-        
+
         button:disabled {
             background: #ddd;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-        
+
         .status {
             text-align: center;
             margin-top: 20px;
@@ -550,22 +546,22 @@
             border-radius: 12px;
             font-size: 14px;
         }
-        
+
         .status.success {
             background: #d4edda;
             color: #155724;
         }
-        
+
         .status.error {
             background: #f8d7da;
             color: #721c24;
         }
-        
+
         .status.info {
             background: #e8f4fd;
             color: #0c5460;
         }
-        
+
         .footer {
             margin-top: 30px;
             padding-top: 20px;
@@ -574,14 +570,14 @@
             font-size: 14px;
             color: #666;
         }
-        
+
         .footer-content {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
-        
+
         .footer-note {
             margin-top: 10px;
             font-size: 12px;
@@ -596,13 +592,13 @@
             object-fit: cover;
             border: 2px solid #66bcea;
         }
-        
+
         .footer a {
             color: #66bcea;
             text-decoration: none;
             transition: color 0.3s;
         }
-        
+
         .footer a:hover {
             color: #4a9fce;
             text-decoration: underline;
@@ -618,16 +614,16 @@
         <div class="header-links">
             <a href="#" id="changelogLink" style="display: none;">📝 更新履歴</a>
         </div>
-        
+
         <button class="description-toggle" id="descriptionToggle">
             📖 使い方・このツールについて（クリックで開閉）
         </button>
-        
+
         <div class="description" id="description">
             <h2>✨このツールでできること</h2>
             <p>ココフォリアでキャラクターの立ち絵を切り替えたとき、<strong>コマの画像が急に大きくなったり小さくなったりする問題</strong>を解決します。<br>
                 なお、ファイルはあなたのブラウザ内で処理され、サーバーには送信されません。</p>
-            
+
             <h3>◆なぜサイズが変わってしまうのか</h3>
             <p>ココフォリアでは、画像の<strong>横幅</strong>でコマの画像サイズが決まります</p>
             <div class="example">
@@ -637,16 +633,16 @@
                 • 子供差分：横幅300px → 通常立ち絵に合わせて拡大されるため、コマ画像が大きくなる
             </div>
             <p>同じキャラクターでも、ポーズや差分によって横幅が違うと立ち絵を切り替えるたびにコマの画像の大きさが変わってしまいます</p>
-            
+
             <h3>◆使い方</h3>
             <ul>
                 <li><strong>画像をまとめて読み込む</strong> - 同じキャラの差分画像（通常・戦闘・子供など）を全部選択</li>
                 <li><strong>「画像を処理」ボタンをクリック</strong> - 透明な余白を削除し、一番横幅が大きい画像に合わせて統一</li>
                 <li><strong>「すべてダウンロード」で保存</strong> - 処理済みの画像をまとめて保存</li>
             </ul>
-            
+
             <p><strong>結果：</strong>すべての画像の横幅が統一されるので、立ち絵を切り替えても<strong>コマの画像の大きさが変わらず、身長差やポーズをそのまま維持</strong>できます</p>
-            
+
             <h3>◆備考</h3>
             <ul>
                 <li>元から<strong>同じ縮尺で描かれている立ち絵</strong>を前提としています。それ以外（例えば：子どもを大きいキャンバスで描き、大人を小さいキャンバスで描いている場合）では、画像の横幅だけそろえても実際の体格差は狂ってしまいます</li>
@@ -660,13 +656,13 @@
                 <li>ただし、アクセス解析のため <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">Google Analytics</a> を利用しており、ページの閲覧状況（アクセス日時・参照元・ブラウザの種類など）がGoogleに送信されます。<strong>画像やファイル名が送信されることはありません</strong></li>
             </ul>
         </div>
-        
+
         <div class="upload-area" id="uploadArea">
             <div class="upload-text">📁 クリックまたはドラッグ&ドロップで画像を選択</div>
             <div class="upload-hint">PNG, WebP形式に対応（複数選択可）</div>
             <input type="file" id="fileInput" accept=".png,.webp" multiple>
         </div>
-        
+
         <div class="options">
             <button type="button" class="advanced-toggle" id="advancedToggle" aria-label="詳細設定" title="詳細設定">⚙️</button>
             <div class="advanced-popup" id="advancedPopup">
@@ -705,17 +701,17 @@
                 <span class="quality-value" id="qualityValue">90%</span>
             </div>
         </div>
-        
+
         <div class="preview-area" id="previewArea"></div>
-        
+
         <div class="buttons">
             <button class="btn-process" id="processBtn" disabled>画像を処理</button>
             <button class="btn-download" id="downloadBtn" disabled>すべてダウンロード</button>
             <button class="btn-clear" id="clearBtn" disabled>クリア</button>
         </div>
-        
+
         <div id="status"></div>
-        
+
         <div class="footer">
             <div class="footer-content">
                 <span>作成者: <a href="https://x.com/WW_3338" target="_blank" rel="noopener noreferrer">Wool&amp;Wag</a></span>
@@ -728,7 +724,7 @@
     <script>
         let originalFiles = [];
         let processedImages = [];
-        
+
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const previewArea = document.getElementById('previewArea');
@@ -748,20 +744,20 @@
         const descriptionToggle = document.getElementById('descriptionToggle');
         const description = document.getElementById('description');
         const changelogLink = document.getElementById('changelogLink');
-        
+
         // 更新履歴リンクのクリックイベント（未使用）
         changelogLink.addEventListener('click', (e) => {
             e.preventDefault();
             alert('更新履歴はまだありません');
             // 将来的にモーダルやページ遷移などで更新履歴を表示するかも
         });
-        
+
         // 説明の開閉
         descriptionToggle.addEventListener('click', () => {
             descriptionToggle.classList.toggle('active');
             description.classList.toggle('active');
         });
-        
+
         // 品質設定の切り替え
         qualitySelect.addEventListener('change', () => {
             if (qualitySelect.value === 'slider') {
@@ -770,7 +766,7 @@
                 qualitySliderContainer.classList.remove('active');
             }
         });
-        
+
         // スライダーの値表示を更新
         qualitySlider.addEventListener('input', () => {
             qualityValue.textContent = qualitySlider.value + '%';
@@ -797,22 +793,22 @@
         }
 
         uploadArea.addEventListener('click', () => fileInput.click());
-        
+
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('dragover');
         });
-        
+
         uploadArea.addEventListener('dragleave', () => {
             uploadArea.classList.remove('dragover');
         });
-        
+
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
             handleFiles(e.dataTransfer.files);
         });
-        
+
         fileInput.addEventListener('change', (e) => {
             handleFiles(e.target.files);
         });
@@ -821,7 +817,7 @@
         function getFileNameBody(fileName) {
             return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
         }
-        
+
         // プレビュー1件分の枠を作る（中身は後から差し込む）
         function createPreviewFrame() {
             const previewItem = document.createElement('div');
@@ -924,7 +920,7 @@
         }
 
         processBtn.addEventListener('click', processImages);
-        
+
 async function processImages() {
             processBtn.disabled = true;
             showStatus('画像を処理中...', 'info');
@@ -985,7 +981,7 @@ async function processImages() {
                 updateButtons();
             }
         }
-        
+
         function loadImage(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -999,7 +995,7 @@ async function processImages() {
                 reader.readAsDataURL(file);
             });
         }
-        
+
         function imageToCanvas(img) {
             const canvas = document.createElement('canvas');
             canvas.width = img.width;
@@ -1014,12 +1010,12 @@ async function processImages() {
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
-            
+
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
-            
+
             let top = 0, bottom = canvas.height, left = 0, right = canvas.width;
-            
+
             outer: for (let y = 0; y < canvas.height; y++) {
                 for (let x = 0; x < canvas.width; x++) {
                     const alpha = data[(y * canvas.width + x) * 4 + 3];
@@ -1029,7 +1025,7 @@ async function processImages() {
                     }
                 }
             }
-            
+
             outer: for (let y = canvas.height - 1; y >= 0; y--) {
                 for (let x = 0; x < canvas.width; x++) {
                     const alpha = data[(y * canvas.width + x) * 4 + 3];
@@ -1039,7 +1035,7 @@ async function processImages() {
                     }
                 }
             }
-            
+
             outer: for (let x = 0; x < canvas.width; x++) {
                 for (let y = 0; y < canvas.height; y++) {
                     const alpha = data[(y * canvas.width + x) * 4 + 3];
@@ -1049,7 +1045,7 @@ async function processImages() {
                     }
                 }
             }
-            
+
             outer: for (let x = canvas.width - 1; x >= 0; x--) {
                 for (let y = 0; y < canvas.height; y++) {
                     const alpha = data[(y * canvas.width + x) * 4 + 3];
@@ -1059,40 +1055,40 @@ async function processImages() {
                     }
                 }
             }
-            
+
             const trimmedWidth = right - left;
             const trimmedHeight = bottom - top;
-            
+
             const trimmedCanvas = document.createElement('canvas');
             trimmedCanvas.width = trimmedWidth;
             trimmedCanvas.height = trimmedHeight;
             const trimmedCtx = trimmedCanvas.getContext('2d');
-            
+
             trimmedCtx.drawImage(
                 canvas,
                 left, top, trimmedWidth, trimmedHeight,
                 0, 0, trimmedWidth, trimmedHeight
             );
-            
+
             return trimmedCanvas;
         }
-        
+
         function addHorizontalPadding(canvas, targetWidth) {
             if (canvas.width >= targetWidth) {
                 return canvas;
             }
-            
+
             const paddedCanvas = document.createElement('canvas');
             paddedCanvas.width = targetWidth;
             paddedCanvas.height = canvas.height;
             const ctx = paddedCanvas.getContext('2d');
-            
+
             const offsetX = Math.floor((targetWidth - canvas.width) / 2);
             ctx.drawImage(canvas, offsetX, 0);
-            
+
             return paddedCanvas;
         }
-        
+
         downloadBtn.addEventListener('click', downloadAllImages);
         async function downloadAllImages() {
             downloadBtn.disabled = true;
@@ -1161,7 +1157,7 @@ async function processImages() {
                 updateButtons();
             }
         }
-        
+
         clearBtn.addEventListener('click', () => {
             originalFiles = [];
             processedImages = [];
