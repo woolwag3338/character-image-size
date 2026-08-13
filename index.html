@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ココフォリア用 立ち絵サイズ調整ツール</title>
+    <!-- 配布ページ（https://woolwag3338.github.io/character-image-size/）向けのメタ情報。
+         og:url と og:image は絶対URLでなければSNS側が解決できないため、公開先を直書きする。
+         リポジトリ名やアカウント名を変えたら、ここと dist/README.md も直すこと。
+         file:// で開いたときは単に無視されるだけで、動作には影響しない -->
+    <meta name="description" content="ココフォリアで立ち絵を切り替えるとコマ画像の大きさが変わってしまう問題を解決する非公式ツール。透明部分のトリミング・横幅の統一・WebP変換を、ブラウザ内だけで行います。">
+    <meta name="theme-color" content="#f1f5f7">
+    <link rel="canonical" href="https://woolwag3338.github.io/character-image-size/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ココフォリア用 立ち絵サイズ調整ツール">
+    <meta property="og:title" content="ココフォリア用 立ち絵サイズ調整ツール">
+    <meta property="og:description" content="立ち絵を切り替えてもコマ画像の大きさが変わらないように、複数の差分画像の横幅をまとめて統一。画像はブラウザ内で処理され、サーバーには送信されません。">
+    <meta property="og:url" content="https://woolwag3338.github.io/character-image-size/">
+    <meta property="og:image" content="https://woolwag3338.github.io/character-image-size/ogp.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="方眼紙の背景に「立ち絵サイズ調整ツール」のタイトルと、透明部分をトリミング・横幅を統一・WebPに変換の3つの機能を並べた画像">
+    <meta property="og:locale" content="ja_JP">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ココフォリア用 立ち絵サイズ調整ツール">
+    <meta name="twitter:description" content="立ち絵を切り替えてもコマ画像の大きさが変わらないように、複数の差分画像の横幅をまとめて統一。画像はブラウザ内で処理され、サーバーには送信されません。">
+    <meta name="twitter:image" content="https://woolwag3338.github.io/character-image-size/ogp.png">
+    <meta name="twitter:creator" content="@WW_3338">
+
+    <!-- favicon（外部ファイル不要のインラインSVG） -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2366bcea'/%3E%3Crect x='18' y='14' width='28' height='36' rx='4' fill='%23ffffff'/%3E%3Ccircle cx='32' cy='26' r='6' fill='%2366bcea'/%3E%3Cpath d='M22 46c0-6 4.5-10 10-10s10 4 10 10z' fill='%2366bcea'/%3E%3Crect x='9' y='10' width='4' height='44' rx='2' fill='%23225d80'/%3E%3Crect x='51' y='10' width='4' height='44' rx='2' fill='%23225d80'/%3E%3C/svg%3E">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9BXH8C74WT"></script>
@@ -47,6 +74,14 @@
             text-align: center;
         }
         
+        .disclaimer {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
         .header-links {
             display: flex;
             justify-content: center;
@@ -107,13 +142,16 @@
             line-height: 1.8;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.25s ease-out, padding 0.25s ease-out;
+            /* 閉じるときにすぐ縮み始めるよう、開閉でイージングを分けている */
+            transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), padding 0.25s ease-out;
         }
-        
+
         .description.active {
-            max-height: 1000px;
+            /* 画面幅が狭いと内容が縦に伸びるため、上限を十分に確保する */
+            max-height: 4000px;
             padding: 20px;
             margin-bottom: 30px;
+            transition: max-height 0.5s ease-in-out, padding 0.25s ease-out;
         }
         
         .description h2 {
@@ -205,6 +243,87 @@
             border-radius: 12px;
             margin-bottom: 30px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .advanced-toggle {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: transparent;
+            border: none;
+            padding: 4px 8px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 6px;
+            box-shadow: none;
+            opacity: 0.55;
+            transition: opacity 0.2s, background 0.2s, transform 0.2s;
+        }
+
+        .advanced-toggle:hover {
+            opacity: 1;
+            background: rgba(102, 188, 234, 0.15);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .advanced-toggle.active {
+            opacity: 1;
+            background: rgba(102, 188, 234, 0.2);
+        }
+
+        .advanced-popup {
+            position: absolute;
+            top: 44px;
+            right: 12px;
+            min-width: 240px;
+            background: white;
+            border: 1px solid #d6e4ee;
+            border-radius: 10px;
+            padding: 14px 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            z-index: 10;
+            display: none;
+        }
+
+        .advanced-popup.active {
+            display: block;
+        }
+
+        .advanced-popup::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 14px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-left: 1px solid #d6e4ee;
+            border-top: 1px solid #d6e4ee;
+            transform: rotate(45deg);
+        }
+
+        .advanced-popup-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a9fce;
+            margin-bottom: 10px;
+        }
+
+        .advanced-popup .option-group {
+            margin-bottom: 8px;
+        }
+
+        .advanced-popup .option-group label {
+            font-size: 14px;
+        }
+
+        .advanced-popup-hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.4;
         }
         
         .option-group {
@@ -463,6 +582,13 @@
             gap: 10px;
         }
         
+        .footer-note {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #999;
+            line-height: 1.6;
+        }
+
         .footer-icon {
             width: 32px;
             height: 32px;
@@ -486,7 +612,9 @@
 <body>
     <div class="container">
         <h1>🎨 ココフォリア用 立ち絵サイズ調整ツール</h1>
-        
+
+        <p class="disclaimer">本ツールは有志が作成した非公式ツールです。ココフォリア運営とは関係ありません</p>
+
         <div class="header-links">
             <a href="#" id="changelogLink" style="display: none;">📝 更新履歴</a>
         </div>
@@ -525,6 +653,12 @@
                 <li>画像の透明部分のトリミングもあわせて行います</li>
                 <li>画像を一枚だけ入れて、単に<strong>透明部分のトリミング＆画像の軽量化</strong>に使うこともできます</li>
             </ul>
+
+            <h3>◆プライバシーについて</h3>
+            <ul>
+                <li>読み込んだ画像は<strong>すべてブラウザ内で処理</strong>され、どこにもアップロードされません</li>
+                <li>ただし、アクセス解析のため <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">Google Analytics</a> を利用しており、ページの閲覧状況（アクセス日時・参照元・ブラウザの種類など）がGoogleに送信されます。<strong>画像やファイル名が送信されることはありません</strong></li>
+            </ul>
         </div>
         
         <div class="upload-area" id="uploadArea">
@@ -534,6 +668,23 @@
         </div>
         
         <div class="options">
+            <button type="button" class="advanced-toggle" id="advancedToggle" aria-label="詳細設定" title="詳細設定">⚙️</button>
+            <div class="advanced-popup" id="advancedPopup">
+                <div class="advanced-popup-title">詳細設定</div>
+                <div class="option-group">
+                    <label>
+                        <input type="checkbox" id="trimTransparent" checked>
+                        透明部分をトリミングする
+                    </label>
+                </div>
+                <div class="option-group">
+                    <label>
+                        <input type="checkbox" id="unifyWidth" checked>
+                        横幅を統一する
+                    </label>
+                </div>
+                <div class="advanced-popup-hint">OFFにすると元の余白・サイズを維持します</div>
+            </div>
             <div class="option-group">
                 <label>
                     <input type="checkbox" id="convertWebP" checked>
@@ -567,9 +718,10 @@
         
         <div class="footer">
             <div class="footer-content">
-                <span>作成者: <a href="https://x.com/WW_3338" target="_blank" rel="noopener noreferrer">Wool&Wag</a></span>
+                <span>作成者: <a href="https://x.com/WW_3338" target="_blank" rel="noopener noreferrer">Wool&amp;Wag</a></span>
                 <!-- <img src="your-icon.png" alt="作成者アイコン" class="footer-icon"> -->
             </div>
+            <p class="footer-note">画像はブラウザ内で処理され、サーバーには送信されません／アクセス解析にGoogle Analyticsを使用しています</p>
         </div>
     </div>
 
@@ -588,6 +740,10 @@
         const qualitySliderContainer = document.getElementById('qualitySliderContainer');
         const qualitySlider = document.getElementById('qualitySlider');
         const qualityValue = document.getElementById('qualityValue');
+        const trimTransparentCheckbox = document.getElementById('trimTransparent');
+        const unifyWidthCheckbox = document.getElementById('unifyWidth');
+        const advancedToggle = document.getElementById('advancedToggle');
+        const advancedPopup = document.getElementById('advancedPopup');
         const statusDiv = document.getElementById('status');
         const descriptionToggle = document.getElementById('descriptionToggle');
         const description = document.getElementById('description');
@@ -619,7 +775,27 @@
         qualitySlider.addEventListener('input', () => {
             qualityValue.textContent = qualitySlider.value + '%';
         });
-        
+
+        // 詳細設定ポップアップの開閉
+        advancedToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            advancedToggle.classList.toggle('active');
+            advancedPopup.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            if (!advancedPopup.contains(e.target) && e.target !== advancedToggle) {
+                advancedPopup.classList.remove('active');
+                advancedToggle.classList.remove('active');
+            }
+        });
+
+        // 読み込み状況・処理状況からボタンの有効／無効を決める（状態管理はここに一元化）
+        function updateButtons() {
+            processBtn.disabled = originalFiles.length === 0;
+            downloadBtn.disabled = processedImages.length === 0;
+            clearBtn.disabled = originalFiles.length === 0;
+        }
+
         uploadArea.addEventListener('click', () => fileInput.click());
         
         uploadArea.addEventListener('dragover', (e) => {
@@ -646,144 +822,167 @@
             return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
         }
         
+        // プレビュー1件分の枠を作る（中身は後から差し込む）
+        function createPreviewFrame() {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            loading.textContent = 'Loading...';
+            previewItem.appendChild(loading);
+
+            return previewItem;
+        }
+
+        // 枠の中身を画像とファイル名で埋める
+        // ファイル名は textContent / プロパティ経由で入れるため、HTMLを含む名前でも安全
+        function fillPreviewItem(previewItem, src, fileName, onRemove, suffix = '') {
+            previewItem.textContent = '';
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn-remove';
+            removeBtn.textContent = '×';
+            removeBtn.addEventListener('click', onRemove);
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = fileName;
+
+            const name = document.createElement('div');
+            name.className = 'preview-name';
+            name.title = fileName;
+            name.textContent = fileName + suffix;
+
+            previewItem.append(removeBtn, img, name);
+        }
+
+        // ファイル1件のプレビューを末尾に追加
+        // 枠を先に置いてから非同期で埋めるので、読み込み完了順で並びが崩れない
+        function appendPreview(file) {
+            const previewItem = createPreviewFrame();
+            previewArea.appendChild(previewItem);
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                fillPreviewItem(previewItem, e.target.result, file.name, () => removeFile(file));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // プレビュー全体を未処理状態で作り直す
+        function rebuildPreviews() {
+            previewArea.textContent = '';
+            previewArea.classList.toggle('active', originalFiles.length > 0);
+            originalFiles.forEach((file) => appendPreview(file));
+        }
+
         function handleFiles(files) {
-            const newFiles = Array.from(files).filter(file => 
+            const newFiles = Array.from(files).filter(file =>
                 file.type === 'image/png' || file.type === 'image/webp'
             );
-            
+
             if (newFiles.length === 0) {
                 showStatus('PNG または WebP ファイルを選択してください', 'error');
                 return;
             }
-            
+
             // ファイルリストに追加
+            const wasProcessed = processedImages.length > 0;
             originalFiles = [...originalFiles, ...newFiles];
-            previewArea.classList.add('active');
-            
-            newFiles.forEach((file) => {
-                const fileIndex = originalFiles.indexOf(file);
-                
-                // 枠を作成
-                const previewItem = document.createElement('div');
-                previewItem.className = 'preview-item';
-                previewItem.dataset.index = fileIndex;
-                
-                // 読み込み中はローディング表示や空の状態にしておく
-                previewItem.innerHTML = `
-                    <div class="loading">Loading...</div>
-                `;
-                
-                // 親要素に追加（この時点で順番が確定する）
-                previewArea.appendChild(previewItem);
-                
-                // 画像読み込み開始
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    // 読み込み完了後、予約しておいた枠の中身を更新する
-                    previewItem.innerHTML = `
-                        <button class="btn-remove" onclick="removeFile(${fileIndex})">×</button>
-                        <img src="${e.target.result}" alt="${file.name}">
-                        <div class="preview-name" title="${file.name}">${file.name}</div>
-                    `;
-                };
-                reader.readAsDataURL(file);
-            });
-            
-            processBtn.disabled = false;
-            clearBtn.disabled = false;
-            downloadBtn.disabled = true;
             processedImages = [];
+
+            if (wasProcessed) {
+                // 処理済みプレビューが残っているので未処理表示に戻す
+                rebuildPreviews();
+            } else {
+                previewArea.classList.add('active');
+                newFiles.forEach((file) => appendPreview(file));
+            }
+
+            updateButtons();
             showStatus(`${originalFiles.length} 個のファイルを読み込みました`, 'success');
         }
-        
-        function removeFile(index) {
+
+        // プレビューの×ボタンから呼ばれる（処理済みの場合は未処理状態に戻る）
+        function removeFile(file) {
+            const index = originalFiles.indexOf(file);
+            if (index === -1) return;
+
             originalFiles.splice(index, 1);
             processedImages = [];
-            
-            // プレビューを再構築
-            previewArea.innerHTML = '';
+
+            rebuildPreviews();
+            updateButtons();
+
             if (originalFiles.length > 0) {
-                originalFiles.forEach((file, i) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const previewItem = document.createElement('div');
-                        previewItem.className = 'preview-item';
-                        previewItem.dataset.index = i;
-                        previewItem.innerHTML = `
-                            <button class="btn-remove" onclick="removeFile(${i})">×</button>
-                            <img src="${e.target.result}" alt="${file.name}">
-                            <div class="preview-name" title="${file.name}">${file.name}</div>
-                        `;
-                        previewArea.appendChild(previewItem);
-                    };
-                    reader.readAsDataURL(file);
-                });
                 showStatus(`${originalFiles.length} 個のファイルを読み込みました`, 'success');
             } else {
-                previewArea.classList.remove('active');
-                processBtn.disabled = true;
-                clearBtn.disabled = true;
-                downloadBtn.disabled = true;
-                statusDiv.textContent = '';
-                statusDiv.className = 'status';
+                clearStatus();
             }
         }
-        
+
         processBtn.addEventListener('click', processImages);
         
 async function processImages() {
             processBtn.disabled = true;
             showStatus('画像を処理中...', 'info');
-            
+
+            const shouldTrim = trimTransparentCheckbox.checked;
+            const shouldUnifyWidth = unifyWidthCheckbox.checked;
+
             try {
                 const imageDataList = [];
                 const total = originalFiles.length;
-                
+
                 for (let i = 0; i < total; i++) {
                     const file = originalFiles[i];
                     showStatus(`画像を処理中... (${i + 1}/${total})`, 'info');
                     await new Promise(resolve => setTimeout(resolve, 0));
 
                     const img = await loadImage(file);
-                    const trimmed = trimTransparentPixels(img);
+                    const canvas = shouldTrim ? trimTransparentPixels(img) : imageToCanvas(img);
                     imageDataList.push({
-                        canvas: trimmed,
-                        fileName: file.name
+                        canvas,
+                        fileName: file.name,
+                        file
                     });
                 }
-                
-                const maxWidth = Math.max(...imageDataList.map(data => data.canvas.width));
-                
-                processedImages = imageDataList.map(data => {
-                    const padded = addHorizontalPadding(data.canvas, maxWidth);
-                    return {
-                        canvas: padded,
-                        fileName: data.fileName
-                    };
-                });
-                
-                previewArea.innerHTML = '';
-                
-                processedImages.forEach((data, i) => {
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'preview-item';
-                    
-                    // ★修正点: ここに「×ボタン」のHTMLを追加しました
-                    // 削除時は removeFile(i) を呼び出します（未処理状態に戻ります）
-                    previewItem.innerHTML = `
-                        <button class="btn-remove" onclick="removeFile(${i})">×</button>
-                        <img src="${data.canvas.toDataURL()}" alt="${data.fileName}">
-                        <div class="preview-name" title="${data.fileName}">${data.fileName} (処理済み)</div>
-                    `;
+
+                if (shouldUnifyWidth) {
+                    const maxWidth = Math.max(...imageDataList.map(data => data.canvas.width));
+                    processedImages = imageDataList.map(data => ({
+                        canvas: addHorizontalPadding(data.canvas, maxWidth),
+                        fileName: data.fileName,
+                        file: data.file
+                    }));
+                } else {
+                    processedImages = imageDataList;
+                }
+
+                previewArea.textContent = '';
+
+                // ×ボタンを押すと、その画像を除いた未処理状態に戻る
+                processedImages.forEach((data) => {
+                    const previewItem = createPreviewFrame();
                     previewArea.appendChild(previewItem);
+                    fillPreviewItem(
+                        previewItem,
+                        data.canvas.toDataURL(),
+                        data.fileName,
+                        () => removeFile(data.file),
+                        ' (処理済み)'
+                    );
                 });
-                
-                downloadBtn.disabled = false;
+
                 showStatus('処理が完了しました！', 'success');
             } catch (error) {
                 console.error(error);
+                processedImages = [];
                 showStatus('エラーが発生しました: ' + error.message, 'error');
-                processBtn.disabled = false;
+            } finally {
+                updateButtons();
             }
         }
         
@@ -801,6 +1000,14 @@ async function processImages() {
             });
         }
         
+        function imageToCanvas(img) {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            return canvas;
+        }
+
         function trimTransparentPixels(img) {
             const canvas = document.createElement('canvas');
             canvas.width = img.width;
@@ -890,81 +1097,89 @@ async function processImages() {
         async function downloadAllImages() {
             downloadBtn.disabled = true;
             showStatus('ダウンロード中... (ポップアップブロックにご注意ください)', 'info');
-            
+
             const convertToWebP = convertWebPCheckbox.checked;
             const qualityMode = qualitySelect.value;
             let quality;
-            
+
             if (qualityMode === 'lossless') {
                 quality = 1.0;
             } else {
                 quality = parseInt(qualitySlider.value) / 100;
             }
-            
-            for (let i = 0; i < processedImages.length; i++) {
-                const data = processedImages[i];
-                let fileName = data.fileName;
-                let mimeType, downloadQuality;
-                
-                const nameBody = getFileNameBody(fileName);
 
-                if (convertToWebP) {
-                    fileName = `${nameBody}.webp`;
-                    mimeType = 'image/webp';
-                    downloadQuality = quality;
-                } else {
-                    // 元がPNGならPNG、それ以外は元の拡張子を維持またはPNGへ
-                    if (fileName.toLowerCase().endsWith('.png')) {
-                        mimeType = 'image/png';
-                        fileName = `${nameBody}.png`;
-                    } else {
-                        // 元がWebPで変換なしの場合など
-                        mimeType = 'image/webp'; 
+            try {
+                for (let i = 0; i < processedImages.length; i++) {
+                    const data = processedImages[i];
+                    let fileName = data.fileName;
+                    let mimeType, downloadQuality;
+
+                    const nameBody = getFileNameBody(fileName);
+
+                    if (convertToWebP) {
                         fileName = `${nameBody}.webp`;
+                        mimeType = 'image/webp';
+                        downloadQuality = quality;
+                    } else {
+                        // 元がPNGならPNG、それ以外は元の拡張子を維持またはPNGへ
+                        if (fileName.toLowerCase().endsWith('.png')) {
+                            mimeType = 'image/png';
+                            fileName = `${nameBody}.png`;
+                        } else {
+                            // 元がWebPで変換なしの場合など
+                            mimeType = 'image/webp';
+                            fileName = `${nameBody}.webp`;
+                        }
+                        downloadQuality = 1.0; // PNG等はquality指定無効だが念のため
                     }
-                    downloadQuality = 1.0; // PNG等はquality指定無効だが念のため
+
+                    const blob = await new Promise(resolve => {
+                        data.canvas.toBlob(resolve, mimeType, downloadQuality);
+                    });
+
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+
+                    // メモリ解放
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                    // ブラウザのダウンロードブロック回避のため待機時間を長めに (100ms -> 500ms以上推奨)
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    // 進捗表示
+                    showStatus(`ダウンロード中... (${i + 1}/${processedImages.length})`, 'info');
                 }
-                
-                const blob = await new Promise(resolve => {
-                    data.canvas.toBlob(resolve, mimeType, downloadQuality);
-                });
-                
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fileName;
-                a.click();
-                
-                // メモリ解放
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-                
-                // ブラウザのダウンロードブロック回避のため待機時間を長めに (100ms -> 500ms以上推奨)
-                await new Promise(resolve => setTimeout(resolve, 500));
-                
-                // 進捗表示
-                showStatus(`ダウンロード中... (${i + 1}/${processedImages.length})`, 'info');
+
+                showStatus('すべてのファイルをダウンロードしました！', 'success');
+            } catch (error) {
+                console.error(error);
+                showStatus('ダウンロード中にエラーが発生しました: ' + error.message, 'error');
+            } finally {
+                updateButtons();
             }
-            
-            downloadBtn.disabled = false;
-            showStatus('すべてのファイルをダウンロードしました！', 'success');
         }
         
         clearBtn.addEventListener('click', () => {
             originalFiles = [];
             processedImages = [];
-            previewArea.innerHTML = '';
+            previewArea.textContent = '';
             previewArea.classList.remove('active');
             fileInput.value = '';
-            processBtn.disabled = true;
-            downloadBtn.disabled = true;
-            clearBtn.disabled = true;
-            statusDiv.textContent = '';
-            statusDiv.className = 'status';
+            updateButtons();
+            clearStatus();
         });
-        
+
         function showStatus(message, type) {
             statusDiv.textContent = message;
             statusDiv.className = `status ${type}`;
+        }
+
+        function clearStatus() {
+            statusDiv.textContent = '';
+            statusDiv.className = 'status';
         }
     </script>
 </body>
