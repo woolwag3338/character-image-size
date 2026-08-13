@@ -5,8 +5,6 @@
 
 **▶ [https://woolwag3338.github.io/character-image-size/](https://woolwag3338.github.io/character-image-size/)**
 
-![差分立ち絵の横幅を揃えるツールの説明。そのまま使うと画像の横幅がバラバラだが、ツールを通すと3枚とも同じ横幅になる](how-it-works.png)
-
 > 本ツールは有志が作成した**非公式ツール**です。ココフォリア運営とは関係ありません。
 
 インストールは要りません。上のリンクを開いて、立ち絵をドラッグ＆ドロップするだけです。
