@@ -51,6 +51,7 @@
             background-color: #f1f5f7;
             background-size: 22px 22px;
             min-height: 100vh;
+            min-height: 100dvh; /* アドレスバーの伸縮で隙間が出るのを防ぐ */
             padding: 20px;
         }
 
@@ -92,10 +93,6 @@
             transition: color 0.3s;
         }
 
-        .header-links a:hover {
-            color: #4a9fce;
-            text-decoration: underline;
-        }
 
         .description-toggle {
             background: #66bcea;
@@ -109,17 +106,14 @@
             width: 100%;
             text-align: left;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* 中身と ▼ を両端へ。
+                                               見出しは1要素にまとめておくこと */
             align-items: center;
             margin-bottom: 20px;
             transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(102, 188, 234, 0.2);
         }
 
-        .description-toggle:hover {
-            background: #4a9fce;
-            box-shadow: 0 4px 12px rgba(102, 188, 234, 0.3);
-        }
 
         .description-toggle::after {
             content: '▼';
@@ -204,12 +198,6 @@
             box-shadow: 0 2px 8px rgba(102, 188, 234, 0.1);
         }
 
-        .upload-area:hover {
-            border-color: #00f2fe;
-            background: #e5fdff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 188, 234, 0.2);
-        }
 
         .upload-area.dragover {
             border-color: #4a9fce;
@@ -239,7 +227,7 @@
             border-radius: 12px;
             margin-bottom: 30px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            position: relative;
+            position: relative; /* 歯車とポップアップの基準 */
         }
 
         .advanced-toggle {
@@ -255,13 +243,6 @@
             box-shadow: none;
             opacity: 0.55;
             transition: opacity 0.2s, background 0.2s, transform 0.2s;
-        }
-
-        .advanced-toggle:hover {
-            opacity: 1;
-            background: rgba(102, 188, 234, 0.15);
-            transform: none;
-            box-shadow: none;
         }
 
         .advanced-toggle.active {
@@ -326,6 +307,12 @@
             margin-bottom: 15px;
         }
 
+        .options-hint {
+            font-size: 12px;
+            color: #999;
+            line-height: 1.5;
+        }
+
         .option-group label {
             display: flex;
             align-items: center;
@@ -337,6 +324,7 @@
         .option-group input[type="checkbox"] {
             width: 20px;
             height: 20px;
+            flex-shrink: 0; /* ラベルの文字に押されて潰れないように */
             margin-right: 10px;
             cursor: pointer;
             accent-color: #66bcea;
@@ -476,10 +464,6 @@
             justify-content: center;
         }
 
-        .preview-item .btn-remove:hover {
-            background: #7f8c8d;
-            transform: scale(1.15);
-        }
 
         .buttons {
             display: flex;
@@ -504,33 +488,18 @@
             color: white;
         }
 
-        .btn-process:hover:not(:disabled) {
-            background: #4a9fce;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 188, 234, 0.4);
-        }
 
         .btn-download {
             background: #3498db;
             color: white;
         }
 
-        .btn-download:hover:not(:disabled) {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-        }
 
         .btn-clear {
             background: #95a5a6;
             color: white;
         }
 
-        .btn-clear:hover:not(:disabled) {
-            background: #7f8c8d;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(149, 165, 166, 0.4);
-        }
 
         button:disabled {
             background: #ddd;
@@ -599,9 +568,222 @@
             transition: color 0.3s;
         }
 
-        .footer a:hover {
-            color: #4a9fce;
-            text-decoration: underline;
+        .upload-text-touch {
+            display: none;
+        }
+
+        @media (hover: hover) {
+            .advanced-toggle:hover:not(.active) {
+                opacity: 1;
+                background: rgba(102, 188, 234, 0.15);
+                transform: none;
+                box-shadow: none;
+            }
+
+            .header-links a:hover {
+                color: #4a9fce;
+                text-decoration: underline;
+            }
+
+            .description-toggle:hover {
+                background: #4a9fce;
+                box-shadow: 0 4px 12px rgba(102, 188, 234, 0.3);
+            }
+
+            .upload-area:hover:not(.dragover) {
+                border-color: #00f2fe;
+                background: #e5fdff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(102, 188, 234, 0.2);
+            }
+
+
+            .preview-item .btn-remove:hover {
+                background: #7f8c8d;
+                transform: scale(1.15);
+            }
+
+            .btn-process:hover:not(:disabled) {
+                background: #4a9fce;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(102, 188, 234, 0.4);
+            }
+
+            .btn-download:hover:not(:disabled) {
+                background: #2980b9;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+            }
+
+            .btn-clear:hover:not(:disabled) {
+                background: #7f8c8d;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(149, 165, 166, 0.4);
+            }
+
+            .footer a:hover {
+                color: #4a9fce;
+                text-decoration: underline;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                padding: 16px;
+                border-radius: 10px;
+            }
+
+            h1 {
+                font-size: 1.35em;
+                margin-bottom: 14px;
+            }
+
+            .disclaimer {
+                font-size: 12px;
+            }
+
+            .header-links {
+                gap: 12px;
+                margin-bottom: 14px;
+            }
+
+            .header-links a,
+            .footer a {
+                display: inline-block;
+                padding: 8px 4px;
+            }
+
+            .description-toggle {
+                font-size: 15px;
+                padding: 12px 14px;
+            }
+
+            .upload-area {
+                padding: 24px 14px;
+                margin-bottom: 20px;
+            }
+
+            .upload-text {
+                font-size: 16px;
+            }
+
+            .option-group label {
+                align-items: flex-start;
+            }
+
+            .option-group input[type="checkbox"] {
+                margin-top: 2px;
+            }
+
+            .upload-text-pointer {
+                display: none;
+            }
+
+            .upload-text-touch {
+                display: inline;
+            }
+
+            .options {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+
+            .advanced-toggle {
+                top: 6px;
+                right: 6px;
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .advanced-popup {
+                top: 54px;
+                right: 6px;
+                max-width: calc(100vw - 44px);
+            }
+
+            .options > .option-group label {
+                padding-right: 44px;
+            }
+
+            .wide-only {
+                display: none;
+            }
+
+            .quality-option {
+                margin-left: 0;
+            }
+
+            .quality-controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .quality-controls label {
+                white-space: nowrap;
+            }
+
+            .quality-option select {
+                flex: 1 1 11em;
+                min-width: 0;
+            }
+
+            .quality-option select {
+                font-size: 16px;
+            }
+
+            .quality-slider-container {
+                margin-left: 0;
+            }
+
+            input[type="range"] {
+                width: auto;
+                flex: 1;
+            }
+
+            .preview-area {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 12px;
+                padding: 8px;
+                max-height: 60dvh;
+            }
+
+            .preview-item {
+                min-height: 140px;
+                padding: 8px;
+            }
+
+            .preview-item img {
+                height: 110px;
+            }
+
+            .preview-name {
+                font-size: 11px;
+            }
+
+            .preview-item .btn-remove {
+                top: 10px;
+                right: 10px;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .buttons button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -609,14 +791,14 @@
     <div class="container">
         <h1>ココフォリア用 立ち絵サイズ調整ツール</h1>
 
-        <p class="disclaimer">本ツールは有志が作成した非公式ツールです。ココフォリア運営とは関係ありません</p>
+        <p class="disclaimer">本ツールは有志が作成した非公式ツールです。ココフォリア運営様とは関係ありません</p>
 
         <div class="header-links">
             <a href="#" id="changelogLink" style="display: none;">更新履歴</a>
         </div>
 
         <button class="description-toggle" id="descriptionToggle">
-            使い方・このツールについて（クリックで開閉）
+            <span>使い方・このツールについて<span class="wide-only">（クリックで開閉）</span></span>
         </button>
 
         <div class="description" id="description">
@@ -658,7 +840,10 @@
         </div>
 
         <div class="upload-area" id="uploadArea">
-            <div class="upload-text">📁 クリックまたはドラッグ&ドロップで画像を選択</div>
+            <div class="upload-text">
+                <span class="upload-text-pointer">📁 クリックまたはドラッグ&ドロップで画像を選択</span>
+                <span class="upload-text-touch">📁 タップして画像を選択</span>
+            </div>
             <div class="upload-hint">PNG, WebP形式に対応（複数選択可）</div>
             <input type="file" id="fileInput" accept=".png,.webp" multiple>
         </div>
@@ -679,14 +864,15 @@
                         横幅を統一する
                     </label>
                 </div>
-                <div class="advanced-popup-hint">OFFにすると元の余白・サイズを維持します</div>
+                <div class="advanced-popup-hint">OFFにすると元の余白・サイズを維持します。<br>通常は両方ONのままで問題ありません</div>
             </div>
             <div class="option-group">
                 <label>
                     <input type="checkbox" id="convertWebP" checked>
-                    WebP形式に変換してダウンロード（PNGよりファイルサイズを軽量化できます）
+                    <span>WebP形式に変換してダウンロード<span class="wide-only">（PNGよりファイルサイズを軽量化できます）</span></span>
                 </label>
             </div>
+            <div class="options-hint">チェックを外すと、元の形式のまま書き出します</div>
             <div class="quality-option">
                 <div class="quality-controls">
                     <label for="qualitySelect">品質設定：</label>
@@ -771,6 +957,7 @@
         qualitySlider.addEventListener('input', () => {
             qualityValue.textContent = qualitySlider.value + '%';
         });
+
 
         // 詳細設定ポップアップの開閉
         advancedToggle.addEventListener('click', (e) => {
@@ -1117,14 +1304,14 @@ async function processImages() {
                         mimeType = 'image/webp';
                         downloadQuality = quality;
                     } else {
-                        // 元がPNGならPNG、それ以外は元の拡張子を維持またはPNGへ
-                        if (fileName.toLowerCase().endsWith('.png')) {
-                            mimeType = 'image/png';
-                            fileName = `${nameBody}.png`;
-                        } else {
-                            // 元がWebPで変換なしの場合など
+                        // 元の形式のまま出す。ファイル名の拡張子ではなく実際の形式で判断する
+                        // （拡張子の無いPNGがWebPとして書き出されるのを防ぐ）
+                        if (data.file.type === 'image/webp') {
                             mimeType = 'image/webp';
                             fileName = `${nameBody}.webp`;
+                        } else {
+                            mimeType = 'image/png';
+                            fileName = `${nameBody}.png`;
                         }
                         downloadQuality = 1.0; // PNG等はquality指定無効だが念のため
                     }
