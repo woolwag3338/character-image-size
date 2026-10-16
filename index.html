@@ -25,10 +25,8 @@
     <meta name="twitter:image" content="https://woolwag3338.github.io/character-image-size/ogp.png">
     <meta name="twitter:creator" content="@WW_3338">
 
-    <!-- favicon（外部ファイル不要のインラインSVG） -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2366bcea'/%3E%3Crect x='18' y='14' width='28' height='36' rx='4' fill='%23ffffff'/%3E%3Ccircle cx='32' cy='26' r='6' fill='%2366bcea'/%3E%3Cpath d='M22 46c0-6 4.5-10 10-10s10 4 10 10z' fill='%2366bcea'/%3E%3Crect x='9' y='10' width='4' height='44' rx='2' fill='%23225d80'/%3E%3Crect x='51' y='10' width='4' height='44' rx='2' fill='%23225d80'/%3E%3C/svg%3E">
 
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9BXH8C74WT"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -36,7 +34,6 @@
     gtag('js', new Date());
     gtag('config', 'G-9BXH8C74WT');
     </script>
-
 
     <style>
         * {
@@ -51,7 +48,7 @@
             background-color: #f1f5f7;
             background-size: 22px 22px;
             min-height: 100vh;
-            min-height: 100dvh; /* アドレスバーの伸縮で隙間が出るのを防ぐ */
+            min-height: 100dvh;
             padding: 20px;
         }
 
@@ -93,7 +90,6 @@
             transition: color 0.3s;
         }
 
-
         .description-toggle {
             background: #66bcea;
             color: white;
@@ -106,14 +102,12 @@
             width: 100%;
             text-align: left;
             display: flex;
-            justify-content: space-between; /* 中身と ▼ を両端へ。
-                                               見出しは1要素にまとめておくこと */
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
             transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(102, 188, 234, 0.2);
         }
-
 
         .description-toggle::after {
             content: '▼';
@@ -132,12 +126,10 @@
             line-height: 1.8;
             max-height: 0;
             overflow: hidden;
-            /* 閉じるときにすぐ縮み始めるよう、開閉でイージングを分けている */
             transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), padding 0.25s ease-out;
         }
 
         .description.active {
-            /* 画面幅が狭いと内容が縦に伸びるため、上限を十分に確保する */
             max-height: 4000px;
             padding: 20px;
             margin-bottom: 30px;
@@ -198,7 +190,6 @@
             box-shadow: 0 2px 8px rgba(102, 188, 234, 0.1);
         }
 
-
         .upload-area.dragover {
             border-color: #4a9fce;
             background: #e8f4fd;
@@ -227,7 +218,7 @@
             border-radius: 12px;
             margin-bottom: 30px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            position: relative; /* 歯車とポップアップの基準 */
+            position: relative;
         }
 
         .advanced-toggle {
@@ -324,7 +315,7 @@
         .option-group input[type="checkbox"] {
             width: 20px;
             height: 20px;
-            flex-shrink: 0; /* ラベルの文字に押されて潰れないように */
+            flex-shrink: 0;
             margin-right: 10px;
             cursor: pointer;
             accent-color: #66bcea;
@@ -420,10 +411,10 @@
             background: white;
             position: relative;
             transition: all 0.3s;
-            min-height: 180px; /* 読み込み中に高さが潰れないように確保 */
+            min-height: 180px;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Loading文字を中央に */
+            justify-content: center;
         }
 
         .preview-item img {
@@ -432,7 +423,7 @@
             object-fit: contain;
             background: repeating-conic-gradient(#f0f0f0 0% 25%, white 0% 50%) 50% / 20px 20px;
             border-radius: 8px;
-            flex-grow: 1; /* 画像が表示されたらスペースを埋める */
+            flex-grow: 1;
         }
 
         .preview-name {
@@ -464,7 +455,6 @@
             justify-content: center;
         }
 
-
         .buttons {
             display: flex;
             gap: 15px;
@@ -488,18 +478,15 @@
             color: white;
         }
 
-
         .btn-download {
             background: #3498db;
             color: white;
         }
 
-
         .btn-clear {
             background: #95a5a6;
             color: white;
         }
-
 
         button:disabled {
             background: #ddd;
@@ -596,7 +583,6 @@
                 transform: translateY(-2px);
                 box-shadow: 0 4px 12px rgba(102, 188, 234, 0.2);
             }
-
 
             .preview-item .btn-remove:hover {
                 background: #7f8c8d;
@@ -901,7 +887,6 @@
         <div class="footer">
             <div class="footer-content">
                 <span>作成者: <a href="https://x.com/WW_3338" target="_blank" rel="noopener noreferrer">Wool&amp;Wag</a></span>
-                <!-- <img src="your-icon.png" alt="作成者アイコン" class="footer-icon"> -->
             </div>
             <p class="footer-note">画像はブラウザ内で処理され、サーバーには送信されません／アクセス解析にGoogle Analyticsを使用しています</p>
         </div>
@@ -931,20 +916,16 @@
         const description = document.getElementById('description');
         const changelogLink = document.getElementById('changelogLink');
 
-        // 更新履歴リンクのクリックイベント（未使用）
         changelogLink.addEventListener('click', (e) => {
             e.preventDefault();
             alert('更新履歴はまだありません');
-            // 将来的にモーダルやページ遷移などで更新履歴を表示するかも
         });
 
-        // 説明の開閉
         descriptionToggle.addEventListener('click', () => {
             descriptionToggle.classList.toggle('active');
             description.classList.toggle('active');
         });
 
-        // 品質設定の切り替え
         qualitySelect.addEventListener('change', () => {
             if (qualitySelect.value === 'slider') {
                 qualitySliderContainer.classList.add('active');
@@ -953,13 +934,10 @@
             }
         });
 
-        // スライダーの値表示を更新
         qualitySlider.addEventListener('input', () => {
             qualityValue.textContent = qualitySlider.value + '%';
         });
 
-
-        // 詳細設定ポップアップの開閉
         advancedToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             advancedToggle.classList.toggle('active');
@@ -972,7 +950,6 @@
             }
         });
 
-        // 読み込み状況・処理状況からボタンの有効／無効を決める（状態管理はここに一元化）
         function updateButtons() {
             processBtn.disabled = originalFiles.length === 0;
             downloadBtn.disabled = processedImages.length === 0;
@@ -1000,12 +977,10 @@
             handleFiles(e.target.files);
         });
 
-        // 拡張子を除いたファイル名を取得する関数
         function getFileNameBody(fileName) {
             return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
         }
 
-        // プレビュー1件分の枠を作る（中身は後から差し込む）
         function createPreviewFrame() {
             const previewItem = document.createElement('div');
             previewItem.className = 'preview-item';
@@ -1018,8 +993,6 @@
             return previewItem;
         }
 
-        // 枠の中身を画像とファイル名で埋める
-        // ファイル名は textContent / プロパティ経由で入れるため、HTMLを含む名前でも安全
         function fillPreviewItem(previewItem, src, fileName, onRemove, suffix = '') {
             previewItem.textContent = '';
 
@@ -1041,8 +1014,6 @@
             previewItem.append(removeBtn, img, name);
         }
 
-        // ファイル1件のプレビューを末尾に追加
-        // 枠を先に置いてから非同期で埋めるので、読み込み完了順で並びが崩れない
         function appendPreview(file) {
             const previewItem = createPreviewFrame();
             previewArea.appendChild(previewItem);
@@ -1054,7 +1025,6 @@
             reader.readAsDataURL(file);
         }
 
-        // プレビュー全体を未処理状態で作り直す
         function rebuildPreviews() {
             previewArea.textContent = '';
             previewArea.classList.toggle('active', originalFiles.length > 0);
@@ -1071,13 +1041,11 @@
                 return;
             }
 
-            // ファイルリストに追加
             const wasProcessed = processedImages.length > 0;
             originalFiles = [...originalFiles, ...newFiles];
             processedImages = [];
 
             if (wasProcessed) {
-                // 処理済みプレビューが残っているので未処理表示に戻す
                 rebuildPreviews();
             } else {
                 previewArea.classList.add('active');
@@ -1088,7 +1056,6 @@
             showStatus(`${originalFiles.length} 個のファイルを読み込みました`, 'success');
         }
 
-        // プレビューの×ボタンから呼ばれる（処理済みの場合は未処理状態に戻る）
         function removeFile(file) {
             const index = originalFiles.indexOf(file);
             if (index === -1) return;
@@ -1146,7 +1113,6 @@ async function processImages() {
 
                 previewArea.textContent = '';
 
-                // ×ボタンを押すと、その画像を除いた未処理状態に戻る
                 processedImages.forEach((data) => {
                     const previewItem = createPreviewFrame();
                     previewArea.appendChild(previewItem);
@@ -1304,8 +1270,6 @@ async function processImages() {
                         mimeType = 'image/webp';
                         downloadQuality = quality;
                     } else {
-                        // 元の形式のまま出す。ファイル名の拡張子ではなく実際の形式で判断する
-                        // （拡張子の無いPNGがWebPとして書き出されるのを防ぐ）
                         if (data.file.type === 'image/webp') {
                             mimeType = 'image/webp';
                             fileName = `${nameBody}.webp`;
@@ -1313,7 +1277,7 @@ async function processImages() {
                             mimeType = 'image/png';
                             fileName = `${nameBody}.png`;
                         }
-                        downloadQuality = 1.0; // PNG等はquality指定無効だが念のため
+                        downloadQuality = 1.0;
                     }
 
                     const blob = await new Promise(resolve => {
@@ -1326,13 +1290,10 @@ async function processImages() {
                     a.download = fileName;
                     a.click();
 
-                    // メモリ解放
                     setTimeout(() => URL.revokeObjectURL(url), 1000);
 
-                    // ブラウザのダウンロードブロック回避のため待機時間を長めに (100ms -> 500ms以上推奨)
                     await new Promise(resolve => setTimeout(resolve, 500));
 
-                    // 進捗表示
                     showStatus(`ダウンロード中... (${i + 1}/${processedImages.length})`, 'info');
                 }
 
